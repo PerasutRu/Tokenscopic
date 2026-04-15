@@ -1,5 +1,8 @@
 **🇹🇭 ภาษาไทย** | [🇺🇸 English](README_en.md)
 
+<img width="1155" height="242" alt="Screenshot 2569-04-15 at 11 01 55" src="https://github.com/user-attachments/assets/48e79929-dd22-43b3-800f-9b290572afeb" />
+
+
 # Tokenscopic 🔍
 
 ### HuggingFace Tokenizer Visualizer

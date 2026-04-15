@@ -1,6 +1,6 @@
 **🇹🇭 ภาษาไทย** | [🇺🇸 English](README_en.md)
 
-# TokenLens 🔍
+# Tokenscopic 🔍
 
 ### HuggingFace Tokenizer Visualizer
 
@@ -10,7 +10,7 @@
 
 ## ภาพรวม
 
-TokenLens เป็นเว็บแอปที่ช่วยให้คุณเห็นว่า tokenizer ของแต่ละโมเดลแยกข้อความอย่างไร โดยออกแบบมาให้ดูง่ายและใช้งานไว:
+Tokenscopic เป็นเว็บแอปที่ช่วยให้คุณเห็นว่า tokenizer ของแต่ละโมเดลแยกข้อความอย่างไร โดยออกแบบมาให้ดูง่ายและใช้งานไว:
 
 - แสดงผล token แบบสีสัน (Visual), ตาราง (Table), และลำดับ Token IDs
 - รองรับโหมด `Single` และ `Compare` (เทียบผลโมเดล A/B)
@@ -81,7 +81,7 @@ Tokenizer_is_all_you_need/
     ├── style.css
     ├── app.js
     ├── package.json
-    └── logo_tokenlens.png
+    └── logo.png
 ```
 
 ---
@@ -329,7 +329,7 @@ Compose ตั้งชื่อจากชื่อโฟลเดอร์โ
 ```json
 {
   "model_id": "meta-llama/Llama-3.2-1B",
-  "text": "สวัสดี TokenLens",
+  "text": "สวัสดี Tokenscopic",
   "hf_token": "hf_xxxx"
 }
 ```

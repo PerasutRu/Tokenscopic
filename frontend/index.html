@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="th" data-lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tokenscopic — HuggingFace Tokenizer Visualizer</title>
+  <meta name="description" content="Visualize how any HuggingFace tokenizer splits your text into tokens. Enter your HF token, model name, and text to see colorful token breakdowns." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- Background blobs -->
+  <div class="bg-blobs">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
+  </div>
+
+  <div class="app-wrapper">
+    <!-- Header -->
+    <header class="header">
+      <div class="header-logo">
+        <div class="logo-icon">
+          <img src="logo.png" alt="Tokenscopic logo" />
+        </div>
+        <div class="logo-text">
+          <span class="logo-title">Token<span class="accent">scopic</span></span>
+          <span class="logo-sub">HuggingFace Tokenizer Visualizer</span>
+        </div>
+      </div>
+      <div class="header-right">
+        <div class="header-badge">
+          <span class="badge-dot"></span>
+          <span>Powered by 🤗 Transformers</span>
+        </div>
+        <!-- Language Toggle -->
+        <button class="lang-toggle" id="lang-toggle" title="Switch Language / เปลี่ยนภาษา" aria-label="Toggle language">
+          <span class="lang-label" id="lang-label">EN</span>
+        </button>
+        <!-- Theme Toggle -->
+        <button class="theme-toggle" id="theme-toggle" title="Toggle Light/Dark Mode" aria-label="Toggle theme">
+          <!-- Sun icon (shown in dark mode) -->
+          <svg class="theme-icon sun-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="5"/>
+            <line x1="12" y1="1" x2="12" y2="3"/>
+            <line x1="12" y1="21" x2="12" y2="23"/>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+            <line x1="1" y1="12" x2="3" y2="12"/>
+            <line x1="21" y1="12" x2="23" y2="12"/>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+          </svg>
+          <!-- Moon icon (shown in light mode) -->
+          <svg class="theme-icon moon-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:none">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- Toolbar -->
+    <div class="app-toolbar glass-card">
+      <div class="mode-toggles">
+        <button class="view-tab active" id="mode-single" data-i18n="modeSingle">Single Model</button>
+        <button class="view-tab" id="mode-compare" data-i18n="modeCompare">Compare Models</button>
+      </div>
+      <div class="feature-toggles">
+        <span class="toggle-label" data-i18n="realtimeToggle">Real-time & Split View</span>
+        <label class="toggle-switch">
+          <input type="checkbox" id="realtime-toggle">
+          <span class="slider round"></span>
+        </label>
+      </div>
+    </div>
+
+    <!-- Main content -->
+    <main class="main" id="main-container">
+      <div class="left-pane" id="left-pane">
+
+      <!-- Config Panel -->
+      <section class="config-panel glass-card">
+        <h2 class="section-title">
+          <span class="step-num">01</span>
+          <span data-i18n="configTitle">ตั้งค่าการเชื่อมต่อ</span>
+        </h2>
+
+        <div class="form-grid" id="main-config-grid">
+
+          <!-- HF Token Section (hidden by default, shown when needed) -->
+          <div class="form-group hf-token-section" id="hf-token-section" style="display:none">
+            <label for="hf-token" class="form-label">
+              <svg class="label-icon" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M18 8a6 6 0 01-7.743 5.743L10 14l-1 1-1 1H6v2H2v-4l4.257-4.257A6 6 0 1118 8zm-6-4a1 1 0 100 2 2 2 0 012 2 1 1 0 102 0 4 4 0 00-4-4z" clip-rule="evenodd"/>
+              </svg>
+              HuggingFace Access Token
+              <span class="token-required-badge" data-i18n="required">จำเป็น</span>
+            </label>
+            <div class="input-wrapper">
+              <input
+                type="password"
+                id="hf-token"
+                class="form-input"
+                placeholder="hf_xxxxxxxxxxxxxxxxxxxxxxxx"
+                autocomplete="off"
+                spellcheck="false"
+              />
+              <button class="input-toggle" id="toggle-token" title="Show/Hide token" aria-label="Toggle token visibility">
+                <svg class="eye-icon show" viewBox="0 0 20 20" fill="currentColor">
+                  <path d="M10 12a2 2 0 100-4 2 2 0 000 4z"/>
+                  <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"/>
+                </svg>
+                <svg class="eye-icon hide" viewBox="0 0 20 20" fill="currentColor" style="display:none">
+                  <path fill-rule="evenodd" d="M3.707 2.293a1 1 0 00-1.414 1.414l14 14a1 1 0 001.414-1.414l-1.473-1.473A10.014 10.014 0 0019.542 10C18.268 5.943 14.478 3 10 3a9.958 9.958 0 00-4.512 1.074l-1.78-1.781zm4.261 4.26l1.514 1.515a2.003 2.003 0 012.45 2.45l1.514 1.514a4 4 0 00-5.478-5.478z" clip-rule="evenodd"/>
+                  <path d="M12.454 16.697L9.75 13.992a4 4 0 01-3.742-3.741L2.335 6.578A9.98 9.98 0 00.458 10c1.274 4.057 5.064 7 9.542 7 .847 0 1.669-.105 2.454-.303z"/>
+                </svg>
+              </button>
+            </div>
+            <p class="form-hint"><span data-i18n="tokenHint">Model นี้ต้องการ Access Token ไม่มี Token? สร้างได้ที่</span> <a href="https://huggingface.co/settings/tokens" target="_blank">huggingface.co/settings/tokens</a></p>
+          </div>
+
+          <div class="form-group" id="model-a-group">
+            <label for="model-id" class="form-label">
+              <svg class="label-icon" viewBox="0 0 20 20" fill="currentColor">
+                <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3zM6 8a2 2 0 11-4 0 2 2 0 014 0zM16 18v-3a5.972 5.972 0 00-.75-2.906A3.005 3.005 0 0119 15v3h-3zM4.75 12.094A5.973 5.973 0 004 15v3H1v-3a3 3 0 013.75-2.906z"/>
+              </svg>
+              <span id="label-model-a"></span>
+            </label>
+            <div id="tokenizer-status" class="tokenizer-status" style="display:none; margin:4px 0;"></div>
+            <div class="model-input-row">
+              <input type="text" id="model-id" class="form-input" placeholder="เช่น nectec/pathumma-thaillm-8b-think-3.0.0" autocomplete="off" spellcheck="false" />
+              <div id="hf-search-results-a" class="hf-search-results" style="display:none"></div>
+            </div>
+            <p class="form-hint" data-i18n="modelInputHint">ช่องนี้ค้นหาได้ทั้งโมเดลในระบบ (cache) และจาก HuggingFace โดยตรง</p>
+            <div class="quick-models">
+              <span class="quick-label" data-i18n="quickSelect">Quick select:</span>
+              <button class="quick-btn" data-target="model-id" data-model="nectec/pathumma-thaillm-8b-think-3.0.0">Pathumma-8B</button>
+              <button class="quick-btn" data-target="model-id" data-model="meta-llama/Llama-3.2-1B">Llama 3.2</button>
+              <button class="quick-btn" data-target="model-id" data-model="Qwen/Qwen2.5-7B">Qwen2.5</button>
+            </div>
+          </div>
+
+          <!-- Model B (Hidden by default) -->
+          <div class="form-group" id="model-b-group" style="display:none">
+            <label for="model-id-b" class="form-label">
+              <svg class="label-icon" viewBox="0 0 20 20" fill="currentColor">
+                <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3zM6 8a2 2 0 11-4 0 2 2 0 014 0zM16 18v-3a5.972 5.972 0 00-.75-2.906A3.005 3.005 0 0119 15v3h-3zM4.75 12.094A5.973 5.973 0 004 15v3H1v-3a3 3 0 013.75-2.906z"/>
+              </svg>
+              <span id="label-model-b"></span>
+            </label>
+            <div id="tokenizer-status-b" class="tokenizer-status" style="display:none; margin:4px 0;"></div>
+            <div class="model-input-row">
+              <input type="text" id="model-id-b" class="form-input" placeholder="e.g. google/gemma-2-2b" autocomplete="off" spellcheck="false" />
+              <div id="hf-search-results-b" class="hf-search-results" style="display:none"></div>
+            </div>
+            <p class="form-hint" data-i18n="modelInputHint">This field searches both cached models and HuggingFace directly</p>
+            <div class="quick-models">
+              <span class="quick-label" data-i18n="quickSelect">Quick select:</span>
+              <button class="quick-btn" data-target="model-id-b" data-model="google/gemma-2-2b">Gemma 2</button>
+              <button class="quick-btn" data-target="model-id-b" data-model="Qwen/Qwen2.5-7B">Qwen2.5</button>
+              <button class="quick-btn" data-target="model-id-b" data-model="meta-llama/Llama-3.2-1B">Llama 3.2</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Input Panel -->
+      <section class="input-panel glass-card">
+        <h2 class="section-title">
+          <span class="step-num">02</span>
+          <span data-i18n="inputTitle">ใส่ข้อความที่ต้องการ Tokenize</span>
+        </h2>
+
+        <div class="textarea-wrapper">
+          <textarea
+            id="input-text"
+            class="form-textarea"
+            placeholder="พิมพ์หรือวางข้อความที่นี่... ลองทั้งภาษาไทย ภาษาอังกฤษ หรือโค้ด!"
+            data-ph-th="พิมพ์หรือวางข้อความที่นี่... ลองทั้งภาษาไทย ภาษาอังกฤษ หรือโค้ด!"
+            data-ph-en="Type or paste text here... Try Thai, English, or code!"
+            rows="4"
+            spellcheck="false"
+          ></textarea>
+          <div class="textarea-footer">
+            <div class="char-count">
+              <span id="char-count">0</span> <span data-i18n="characters">ตัวอักษร</span>
+            </div>
+            <div class="sample-texts">
+              <span class="quick-label" data-i18n="exampleLabel">ตัวอย่าง:</span>
+              <button class="sample-btn" data-text="สวัสดีครับ ยินดีที่ได้รู้จัก โมเดลภาษาไทย Pathumma">🇹🇭 ภาษาไทย</button>
+              <button class="sample-btn" data-text="Hello World! The quick brown fox jumps over the lazy dog.">🇬🇧 English</button>
+              <button class="sample-btn" data-text="def fibonacci(n):&#10;    if n <= 1:&#10;        return n&#10;    return fibonacci(n-1) + fibonacci(n-2)">💻 Code</button>
+              <button class="sample-btn" data-text="สวัสดี Hello こんにちは 你好 안녕하세요 مرحبا">🌏 Multilingual</button>
+            </div>
+          </div>
+        </div>
+
+        <button class="analyze-btn" id="analyze-btn">
+          <span class="btn-content">
+            <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+            </svg>
+            <span data-i18n="tokenizeBtn">Tokenize Now</span>
+          </span>
+          <div class="btn-loader" style="display:none">
+            <div class="spinner"></div>
+            <span data-i18n="tokenizingLabel">กำลัง Tokenize...</span>
+          </div>
+        </button>
+      </section>
+
+
+      </div> <!-- /left-pane -->
+
+      <div class="right-pane" id="right-pane">
+        <div class="results-columns" id="results-columns">
+          
+          <!-- COLUMN A -->
+          <div class="result-col" id="result-col-a">
+            <div class="model-title-badge" id="badge-model-a" hidden>Model A</div>
+      <!-- Error Display -->
+      <div class="error-card glass-card" id="error-card" style="display:none">
+        <div class="error-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"/>
+            <line x1="12" y1="8" x2="12" y2="12"/>
+            <line x1="12" y1="16" x2="12.01" y2="16"/>
+          </svg>
+        </div>
+        <div class="error-content">
+        <h4 data-i18n="errorTitle">เกิดข้อผิดพลาด</h4>
+          <p id="error-message"></p>
+        </div>
+      </div>
+
+      <!-- Results Panel -->
+      <section class="results-panel" id="results-panel" style="display:none">
+
+        <!-- Stats Row -->
+        <div class="stats-row">
+          <div class="stat-card glass-card">
+            <div class="stat-icon tokens-icon">🔤</div>
+            <div class="stat-info">
+              <div class="stat-value" id="stat-tokens">—</div>
+              <div class="stat-label">Tokens</div>
+            </div>
+          </div>
+          <div class="stat-card glass-card">
+            <div class="stat-icon chars-icon">📝</div>
+            <div class="stat-info">
+              <div class="stat-value" id="stat-chars">—</div>
+              <div class="stat-label">Characters</div>
+            </div>
+          </div>
+          <div class="stat-card glass-card">
+            <div class="stat-icon ratio-icon">📊</div>
+            <div class="stat-info">
+              <div class="stat-value" id="stat-ratio">—</div>
+              <div class="stat-label">Chars / Token</div>
+            </div>
+          </div>
+          <div class="stat-card glass-card">
+            <div class="stat-icon vocab-icon">📚</div>
+            <div class="stat-info">
+              <div class="stat-value" id="stat-vocab">—</div>
+              <div class="stat-label">Vocab Size</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tokenizer Info -->
+        <div class="tokenizer-info glass-card">
+          <div class="info-item">
+            <span class="info-label">Model</span>
+            <span class="info-value mono" id="info-model">—</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Tokenizer Class (HF)</span>
+            <span class="info-value mono" id="info-type">—</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Tokenizer Runtime Class</span>
+            <span class="info-value mono" id="info-runtime-type">—</span>
+          </div>
+        </div>
+
+        <!-- View Toggle -->
+        <div class="view-controls glass-card">
+          <h2 class="section-title result-title-row" style="margin-bottom:0">
+            <span class="step-num">03</span>
+            <span data-i18n="resultsTitle">ผลลัพธ์การ Tokenize</span>
+            <span class="result-processing-indicator" id="result-processing-a" style="display:none" aria-live="polite">
+              <span class="mini-spinner"></span>
+            </span>
+          </h2>
+          <div class="view-tabs" role="tablist">
+            <button class="view-tab active" id="tab-visual" role="tab" aria-selected="true">👁️ Visual</button>
+            <button class="view-tab" id="tab-table" role="tab" aria-selected="false">📋 Table</button>
+            <button class="view-tab" id="tab-ids" role="tab" aria-selected="false">🔢 Token IDs</button>
+          </div>
+        </div>
+
+        <!-- Visual View -->
+        <div class="view-pane glass-card" id="view-visual">
+          <div class="token-legend">
+            <span class="legend-title" data-i18n="legendTitle">สีแต่ละ Token:</span>
+            <div class="legend-colors">
+              <span class="legend-dot" style="background:#7C3AED"></span>
+              <span class="legend-dot" style="background:#0891B2"></span>
+              <span class="legend-dot" style="background:#059669"></span>
+              <span class="legend-dot" style="background:#D97706"></span>
+              <span class="legend-dot" style="background:#DC2626"></span>
+              <span class="legend-dot" style="background:#DB2777"></span>
+            </div>
+            <span class="legend-hint" data-i18n="legendHint">Hover เพื่อดูรายละเอียด</span>
+          </div>
+          <div class="token-display" id="token-display"></div>
+        </div>
+
+        <!-- Table View -->
+        <div class="view-pane glass-card" id="view-table" style="display:none">
+          <div class="table-wrapper">
+            <table class="token-table" id="token-table">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Token ID</th>
+                  <th>Token String</th>
+                  <th>Raw Token</th>
+                  <th>Length</th>
+                </tr>
+              </thead>
+              <tbody id="token-table-body"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Token IDs View -->
+        <div class="view-pane glass-card" id="view-ids" style="display:none">
+          <div class="ids-header">
+            <span class="ids-label">Token ID Array</span>
+            <button class="copy-btn" id="copy-ids-btn">
+              <svg viewBox="0 0 20 20" fill="currentColor" class="copy-icon">
+                <path d="M8 3a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1z"/>
+                <path d="M6 3a2 2 0 00-2 2v11a2 2 0 002 2h8a2 2 0 002-2V5a2 2 0 00-2-2 3 3 0 01-3 3H9a3 3 0 01-3-3z"/>
+              </svg>
+              Copy
+            </button>
+          </div>
+          <div class="ids-display mono" id="ids-display"></div>
+        </div>
+
+      </section>
+
+
+          </div>
+
+          <!-- COLUMN B -->
+          <div class="result-col" id="result-col-b" style="display:none">
+            <div class="model-title-badge" id="badge-model-b">Model B</div>
+      <!-- Error Display -->
+      <div class="error-card glass-card" id="error-card-b" style="display:none">
+        <div class="error-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"/>
+            <line x1="12" y1="8" x2="12" y2="12"/>
+            <line x1="12" y1="16" x2="12.01" y2="16"/>
+          </svg>
+        </div>
+        <div class="error-content">
+        <h4 data-i18n="errorTitle">เกิดข้อผิดพลาด</h4>
+          <p id="error-message-b"></p>
+        </div>
+      </div>
+
+      <!-- Results Panel -->
+      <section class="results-panel" id="results-panel-b" style="display:none">
+
+        <!-- Stats Row -->
+        <div class="stats-row">
+          <div class="stat-card glass-card">
+            <div class="stat-icon tokens-icon">🔤</div>
+            <div class="stat-info">
+              <div class="stat-value" id="stat-tokens-b">—</div>
+              <div class="stat-label">Tokens</div>
+            </div>
+          </div>
+          <div class="stat-card glass-card">
+            <div class="stat-icon chars-icon">📝</div>
+            <div class="stat-info">
+              <div class="stat-value" id="stat-chars-b">—</div>
+              <div class="stat-label">Characters</div>
+            </div>
+          </div>
+          <div class="stat-card glass-card">
+            <div class="stat-icon ratio-icon">📊</div>
+            <div class="stat-info">
+              <div class="stat-value" id="stat-ratio-b">—</div>
+              <div class="stat-label">Chars / Token</div>
+            </div>
+          </div>
+          <div class="stat-card glass-card">
+            <div class="stat-icon vocab-icon">📚</div>
+            <div class="stat-info">
+              <div class="stat-value" id="stat-vocab-b">—</div>
+              <div class="stat-label">Vocab Size</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tokenizer Info -->
+        <div class="tokenizer-info glass-card">
+          <div class="info-item">
+            <span class="info-label">Model</span>
+            <span class="info-value mono" id="info-model-b">—</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Tokenizer Class (HF)</span>
+            <span class="info-value mono" id="info-type-b">—</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Tokenizer Runtime Class</span>
+            <span class="info-value mono" id="info-runtime-type-b">—</span>
+          </div>
+        </div>
+
+        <!-- View Toggle -->
+        <div class="view-controls glass-card">
+          <h2 class="section-title result-title-row" style="margin-bottom:0">
+            <span class="step-num">03</span>
+            <span data-i18n="resultsTitle">ผลลัพธ์การ Tokenize</span>
+            <span class="result-processing-indicator" id="result-processing-b" style="display:none" aria-live="polite">
+              <span class="mini-spinner"></span>
+            </span>
+          </h2>
+          <div class="view-tabs" role="tablist">
+            <button class="view-tab active" id="tab-visual-b" role="tab" aria-selected="true">👁️ Visual</button>
+            <button class="view-tab" id="tab-table-b" role="tab" aria-selected="false">📋 Table</button>
+            <button class="view-tab" id="tab-ids-b" role="tab" aria-selected="false">🔢 Token IDs</button>
+          </div>
+        </div>
+
+        <!-- Visual View -->
+        <div class="view-pane glass-card" id="view-visual-b">
+          <div class="token-legend">
+            <span class="legend-title" data-i18n="legendTitle">สีแต่ละ Token:</span>
+            <div class="legend-colors">
+              <span class="legend-dot" style="background:#7C3AED"></span>
+              <span class="legend-dot" style="background:#0891B2"></span>
+              <span class="legend-dot" style="background:#059669"></span>
+              <span class="legend-dot" style="background:#D97706"></span>
+              <span class="legend-dot" style="background:#DC2626"></span>
+              <span class="legend-dot" style="background:#DB2777"></span>
+            </div>
+            <span class="legend-hint" data-i18n="legendHint">Hover เพื่อดูรายละเอียด</span>
+          </div>
+          <div class="token-display" id="token-display-b"></div>
+        </div>
+
+        <!-- Table View -->
+        <div class="view-pane glass-card" id="view-table-b" style="display:none">
+          <div class="table-wrapper">
+            <table class="token-table" id="token-table-b">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Token ID</th>
+                  <th>Token String</th>
+                  <th>Raw Token</th>
+                  <th>Length</th>
+                </tr>
+              </thead>
+              <tbody id="token-table-body-b"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Token IDs View -->
+        <div class="view-pane glass-card" id="view-ids-b" style="display:none">
+          <div class="ids-header">
+            <span class="ids-label">Token ID Array</span>
+            <button class="copy-btn" id="copy-ids-btn-b">
+              <svg viewBox="0 0 20 20" fill="currentColor" class="copy-icon">
+                <path d="M8 3a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1z"/>
+                <path d="M6 3a2 2 0 00-2 2v11a2 2 0 002 2h8a2 2 0 002-2V5a2 2 0 00-2-2 3 3 0 01-3 3H9a3 3 0 01-3-3z"/>
+              </svg>
+              Copy
+            </button>
+          </div>
+          <div class="ids-display mono" id="ids-display-b"></div>
+        </div>
+
+      </section>
+
+
+          </div>
+
+        </div> <!-- /results-columns -->
+      </div> <!-- /right-pane -->
+    </main>
+
+    <footer class="footer">
+      <p><span data-i18n="footerTagline">Tokenscopic — วิเคราะห์ Tokenizer จาก 🤗 HuggingFace ได้อย่างสวยงาม</span></p>
+      <p class="footer-credit">Created by <strong>Perasut Rungcharassang</strong></p>
+    </footer>
+  </div>
+
+  <!-- Token Tooltip -->
+    <div class="token-tooltip" id="token-tooltip" style="display:none">
+    <div class="tooltip-header" data-i18n="tooltipHeader">Token Detail</div>
+    <div class="tooltip-row">
+      <span class="tooltip-label">ID:</span>
+      <span class="tooltip-val mono" id="tt-id"></span>
+    </div>
+    <div class="tooltip-row">
+      <span class="tooltip-label" data-i18n="ttString">String:</span>
+      <span class="tooltip-val mono" id="tt-str"></span>
+    </div>
+    <div class="tooltip-row">
+      <span class="tooltip-label" data-i18n="ttBytes">Bytes:</span>
+      <span class="tooltip-val mono" id="tt-bytes"></span>
+    </div>
+    <div class="tooltip-row">
+      <span class="tooltip-label" data-i18n="ttIndex">Index:</span>
+      <span class="tooltip-val mono" id="tt-idx"></span>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

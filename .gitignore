@@ -1,0 +1,85 @@
+# ==============================
+# Python / Backend
+# ==============================
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+
+# Distribution / packaging
+dist/
+build/
+*.egg-info/
+*.egg
+.eggs/
+
+# Pytest
+.pytest_cache/
+.coverage
+htmlcov/
+
+# MyPy
+.mypy_cache/
+.dmypy.json
+
+# Ruff / Black / Pylint
+.ruff_cache/
+
+# ==============================
+# Tokenizer Cache (can be large)
+# ==============================
+backend/tokenizer_model/
+
+# ==============================
+# Frontend / Node
+# ==============================
+node_modules/
+frontend/node_modules/
+
+# Build outputs (if you add a bundler later)
+dist/
+frontend/dist/
+.parcel-cache/
+.vite/
+
+# npm / yarn logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json.bak
+
+# ==============================
+# Environment & Secrets
+# ==============================
+.env
+.env.local
+.env.*.local
+*.env
+
+# ==============================
+# OS & Editor
+# ==============================
+.DS_Store
+Thumbs.db
+desktop.ini
+
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# ==============================
+# Misc
+# ==============================
+*.log
+*.tmp
+*.bak
+*.swp
+*~

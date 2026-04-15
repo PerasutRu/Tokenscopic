@@ -1,0 +1,19 @@
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: docker/backend.Dockerfile
+    ports:
+      - "8000:8000"
+    volumes:
+      # Host path matches backend/main.py (TOKENIZER_CACHE_DIR)
+      - ./backend/tokenizer_model:/app/backend/tokenizer_model
+
+  frontend:
+    build:
+      context: .
+      dockerfile: docker/frontend.Dockerfile
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend

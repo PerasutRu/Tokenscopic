@@ -1,0 +1,9 @@
+# Runtime for Docker (CPU). accelerate omitted — not imported by the app.
+fastapi==0.135.3
+uvicorn==0.44.0
+transformers==5.5.0
+huggingface_hub==1.9.2
+tiktoken==0.12.0
+sentencepiece==0.2.1
+protobuf==7.34.1
+certifi==2025.8.3

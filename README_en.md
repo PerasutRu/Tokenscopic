@@ -1,6 +1,6 @@
 [🇹🇭 ภาษาไทย](README.md) | **🇺🇸 English**
 
-# TokenLens 🔍
+# Tokenscopic 🔍
 
 ### HuggingFace Tokenizer Visualizer
 
@@ -10,13 +10,31 @@
 
 ## Overview
 
-TokenLens is a web app for inspecting tokenizer behavior in depth:
+Tokenscopic is a web app for inspecting tokenizer behavior in depth:
 
 - Visual token chips, detailed token table, and raw token IDs
 - `Single` and `Compare` mode (A/B model comparison)
 - `Real-time` tokenization while typing
 - HuggingFace model search + local cached model list
 - On-demand HF token prompt for private/gated repositories
+
+---
+
+## Tutorial Video
+
+https://github.com/user-attachments/assets/8bded40a-f0af-4383-8518-6b7b10f2b80d
+
+### English Description
+
+**Tokenscopic: A Hugging Face Tokenizer Visualizer**
+
+This video demonstrates **Tokenscopic**, a web-based application designed to help users visualize and understand how different Hugging Face language models tokenize text.
+
+**Key Features Showcased:**
+- **Single Model View:** Input any Hugging Face Model ID (e.g., Llama 3, Qwen) to see exactly how it breaks down text into tokens. It seamlessly handles both public and gated models (via Access Token).
+- **Detailed Visualization:** View tokenized text with intuitive color-coding alongside key metrics (Token count, Characters, Vocab Size). Users can easily switch between a visual view, a detailed table breakdown, or raw Token IDs arrays.
+- **Compare Models:** A powerful side-by-side comparison (Split View) allowing you to evaluate how two different tokenizers process the exact same text simultaneously.
+- **Real-time Update:** Watch the tokenization process update dynamically in real-time as you type or modify the input text.
 
 ---
 
@@ -62,7 +80,7 @@ Tokenizer_is_all_you_need/
     ├── style.css
     ├── app.js
     ├── package.json
-    └── logo_tokenlens.png
+    └── logo.png
 ```
 
 ---
@@ -307,7 +325,7 @@ Example request:
 ```json
 {
   "model_id": "meta-llama/Llama-3.2-1B",
-  "text": "Hello TokenLens",
+  "text": "Hello Tokenscopic",
   "hf_token": "hf_xxxx"
 }
 ```

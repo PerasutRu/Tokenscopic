@@ -1,6 +1,6 @@
 [🇹🇭 ภาษาไทย](README.md) | **🇺🇸 English**
 
-<img width="1155" height="242" alt="Screenshot 2569-04-15 at 11 01 55" src="https://github.com/user-attachments/assets/48e79929-dd22-43b3-800f-9b290572afeb" />
+<img width="1155" height="242" alt="Screenshot 2569-04-15 at 11 01 55" src="https://github.com/user-attachments/assets/78b898d6-dc96-4b2b-8416-59a7a570fc81" />
 
 # Tokenscopic 🔍
 
@@ -24,10 +24,7 @@ Tokenscopic is a web app for inspecting tokenizer behavior in depth:
 
 ## Tutorial Video
 
-[![Tutorial Video](https://img.youtube.com/vi/W2vgiTUqpLM/maxresdefault.jpg)](https://www.youtube.com/watch?v=W2vgiTUqpLM)
-
-<video src="https://github.com/user-attachments/assets/8bded40a-f0af-4383-8518-6b7b10f2b80d" controls="controls" width="100%">
-</video>
+https://github.com/user-attachments/assets/7c612cfd-efe1-4c81-af8d-ada41afa0938
 
 ### English Description
 

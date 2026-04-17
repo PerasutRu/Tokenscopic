@@ -24,7 +24,7 @@ Tokenscopic is a web app for inspecting tokenizer behavior in depth:
 
 ## Tutorial Video
 
-https://github.com/user-attachments/assets/8bded40a-f0af-4383-8518-6b7b10f2b80d
+[![Tutorial Video](https://img.youtube.com/vi/W2vgiTUqpLM/maxresdefault.jpg)](https://www.youtube.com/watch?v=W2vgiTUqpLM)
 
 ### English Description
 

@@ -26,6 +26,9 @@ Tokenscopic is a web app for inspecting tokenizer behavior in depth:
 
 [![Tutorial Video](https://img.youtube.com/vi/W2vgiTUqpLM/maxresdefault.jpg)](https://www.youtube.com/watch?v=W2vgiTUqpLM)
 
+<video src="https://www.youtube.com/watch?v=W2vgiTUqpLM" controls="controls" width="100%">
+</video>
+
 ### English Description
 
 **Tokenscopic: A Hugging Face Tokenizer Visualizer**
